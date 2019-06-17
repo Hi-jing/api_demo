@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>接口示例</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<style>
+    body {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        var id = $.getUrlParam("id");
+        $.ajax({
+            url: rootPath() + "/course/detail.do?id=" + id,
+            type: "get",
+            success: function (res) {
+                if (res.code === 0) {
+                    $("#cId").val(res.data.id);
+                    $("#cName").val(res.data.name);
+                    $("#cTeacher").val(res.data.teacher);
+                } else {
+                    alert(res.message);
+                }
+            }
+        });
+
+        $(document).on("click", "#update-btn", function () {
+            var data = $("#update-form").serializeObject();
+            $.ajax({
+                url: rootPath() + "/course/update.do?id=" + id,
+                type: "put",
+                dataType: "json",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify(data),
+                success: function (res) {
+                    if (res.code === 0) {
+                        window.location.href = "course-list.html";
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            });
+        })
+    })
+
+</script>
+<body>
+<h1>课程更新</h1>
+<hr>
+<br><br>
+<form id="update-form">
+    <p>课程名称： <input id="cName" name="name"/></p>
+    <p>任课老师： <input id="cTeacher" name="teacher"/></p>
+</form>
+<p>
+    <button id="update-btn">保存更新</button>
+</p>
+</body>
+</html>

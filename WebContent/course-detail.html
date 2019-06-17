@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>接口示例</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<style>
+    body {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: rootPath() + "/course/detail.do?id=" + $.getUrlParam("id"),
+            type: "get",
+            success: function (res) {
+                if (res.code === 0) {
+                    $("#cId").text(res.data.id);
+                    $("#cName").text(res.data.name);
+                    $("#cTeacher").text(res.data.teacher);
+                } else {
+                    alert(res.message);
+                }
+            }
+        });
+    })
+
+</script>
+<body>
+<h1>课程详情</h1>
+<hr>
+<br><br>
+<p>id： <span id="cId"></span></p>
+<p>课程名称： <span id="cName"></span></p>
+<p>任课老师： <span id="cTeacher"></span></p>
+</body>
+</html>

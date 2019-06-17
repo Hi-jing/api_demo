@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>接口示例</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<style>
+    body {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table {
+        width: 500px;
+    }
+
+    table td {
+        padding: 0px 10px;
+        text-align: center;
+    }
+
+    #list-tbody tr td a {
+        padding-left: 10px;
+    }
+
+</style>
+<script type="text/javascript">
+    $(function () {
+        initTableData();
+    })
+
+    function initTableData() {
+        $("#list-tbody").empty();
+        $.ajax({
+            url: rootPath() + "/course/list.do",
+            type: "get",
+            success: function (res) {
+                if (res.code === 0) {
+                    var tbody = "";
+                    for (var i = 0; i < res.data.length; i++) {
+                        tbody += '<tr>'
+                            + '<td>' + res.data[i].id + '</td>'
+                            + '<td>' + res.data[i].name + '</td>'
+                            + '<td>' + res.data[i].teacher + '</td>'
+                            + '<td>'
+                            + '<a href="course-detail.html?id=' + res.data[i].id + '">详情</a>'
+                            + '<a href="course-update.html?id=' + res.data[i].id + '">编辑</a>'
+                            + '<a  href="javascript:void(0);" onclick="deleteCourse(' + res.data[i].id + ')">删除</a>'
+                            + '</td>'
+                            + '</tr>';
+                    }
+                    $("#list-tbody").append(tbody);
+                } else {
+                    alert(res.message);
+                }
+            }
+        });
+    }
+
+    function deleteCourse(id) {
+        $.ajax({
+            url: rootPath() + "/course/delete.do?id=" + id,
+            type: "delete",
+            success: function (res) {
+                if (res.code === 0) {
+                    initTableData();
+                } else {
+                    alert(res.message);
+                }
+            }
+        });
+    }
+
+</script>
+
+<body>
+<h1>课程列表</h1>
+<hr>
+<a href="course-add.html">添加课程</a>
+<br>
+<br>
+<table align="center" border="0" id="list-table">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>课程名称</th>
+        <th>任课老师</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="list-tbody">
+    </tbody>
+</table>
+
+</body>
+</html>
